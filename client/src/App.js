@@ -6,12 +6,14 @@ import Login from './pages/Login';
 import './App.css'
 import InputAdornments from './components/passwordBox';
 import IssuePage from './Layouts/IssuePage';
+import IssueForm from './pages/IssueForm';
 
 function App() {
 
   return (
    <>
-    <Login/>
+    {/* <Login/> */}
+    <IssueForm/>
    {/* <IssuePage /> */}
    </>
   );

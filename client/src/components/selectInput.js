@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { width } from '@mui/system';
 
 
 
@@ -32,9 +33,12 @@ import MenuItem from '@mui/material/MenuItem';
           onChange={handleChange}
           helperText= {"Please select your " + props.listTitle}
           name = {props.name}
+          style = {{
+            width : '100%'}
+          }
         >
           {optionsArray.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem key={option.value} value={option.value} sx = {{width : { md : '50ch' , xs : '30ch'} }}>
               {option.label}
             </MenuItem>
           ))}
