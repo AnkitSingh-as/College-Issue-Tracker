@@ -8,10 +8,10 @@ import { flexbox } from '@mui/system';
 
 function SimpleDialog(props) {
 
-    const [open, setOpen] = React.useState(true);
+    // const [open, setOpen] = React.useState(true);
 
     const close = () => {
-        props.close(false);
+        props.onClose();
         console.log('closed by outer click');
     }
 

@@ -4,6 +4,8 @@ import { Box, TextField } from '@mui/material'
 import SelectInput from './selectInput'
 import PasswordBox from './passwordBox'
 import SubmitButton from './SubmitButton';
+import { useDispatch } from 'react-redux';
+import { registerUserthunk } from '../store/login-actions';
 
 const branches = [
     {
@@ -38,10 +40,23 @@ const branches = [
 
 const SignupInput = () => {
 
+    const dispatch = useDispatch();
+
     const formSumitHandler  = ( event) => {
             event.preventDefault();
-            // const {scholarId, email,name, branch, password, confirmPassword } = event.target
-            // console.log(scholarId.value, email.value, name.value, branch.value, password.value, confirmPassword.value);
+            const {scholarId, email,name, branch, password, confirmPassword } = event.target
+
+            const data = {
+                username : scholarId.value,
+                scholarid : scholarId.value,
+                name :  name.value,
+                email : email.value,
+                branch : branch.value,
+                password : password.value,
+            }
+            console.log(scholarId.value, email.value, name.value, branch.value, password.value, confirmPassword.value);
+            
+            dispatch(registerUserthunk(data));
     }
 
     return (
@@ -115,7 +130,7 @@ const SignupInput = () => {
                 }} />
             </Box>
 
-            <SubmitButton title='Sign Up'></SubmitButton>
+            <SubmitButton title='Sign Up' type='submit'></SubmitButton>
 
         </form>
     )

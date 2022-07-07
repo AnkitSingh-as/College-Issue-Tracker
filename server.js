@@ -9,6 +9,7 @@ const passport = require("passport");
 //passport-local installed, do not have to set
 const passportLocalMongoose = require("passport-local-mongoose");
 const { redirect } = require("express/lib/response");
+const { runInNewContext } = require("vm");
 
 const uri = process.env.MONGO_URI;
 const PORT = process.env.PORT || 5000;
@@ -35,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // need this to parse the json with the req
-app.use(express.json());
+app.use(express.json({limit : '50mb'}));
 app.use(express.text());
 
 //connect to Mongo
@@ -54,8 +55,8 @@ const issueSchema  = new mongoose.Schema({
     title : String,
     description : String,
     author : Number,
-    creationDate : Date,
-    solvedDate : Date,
+    creationDate : String,
+    solvedDate : String,
     status : String,
     likes: Array,
     imgSrc : String,
@@ -63,12 +64,13 @@ const issueSchema  = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+    username : Number,
     scholarid : Number,
     name : String,
     email : String,
     branch : String,
     password: String,
-    issues : Array,
+    issues : {type : Array, default : []}
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -84,15 +86,131 @@ app.use(express.static(path.join(__dirname, "client", "build")))
 
 app.get("/", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-  });
 
-app.post("/addissue", (req, res) => {
+});
+
+app.get('/getIssue' , (req, res) =>  {
+    Issue.find({}, (err, foundIssues) => {
+        if(!err){
+            res.send(foundIssues);
+        }
+        else{
+            console.log('Issues couldn\'t be sent');
+        }
+    })
+})
+
+app.post('/getUser' , (req, res) => {
+
+  const { scholarid } = req.body;
+  console.log(scholarid);
+
+  User.find ( {scholarid : scholarid }  , (err, foundUser) => {
+    if(!err){
+      console.log(foundUser);
+      res.send(foundUser);
+    }
+    else{
+      console.log('User couldn\'t be found');
+    }
+  }) 
+})
+
+app.post("/addIssue", (req, res) => {
+  
     const issue = new Issue(req.body);
     issue.save();
-    console.log(issue);
+    console.log(req.body);
+    res.send(req.body);
 })
 
 
+app.get('/loggedIn' , (req, res) => {
+  if(req.isAuthenticated()){
+    res.send({data : req.user,
+    login : true});
+  }
+  else{
+    res.send({data: null, login : false});
+  }
+})
+
+app.post('/login' , (req, res) => {
+  console.log('trying to log in backend')
+    let {scholarid, password } = req.body;
+    console.log(scholarid, password);
+    const user =  new User({
+      username : scholarid,
+      password : password,
+    });
+
+    req.login(user, (err) => {
+     
+      if(err) {
+        console.log(err);
+      }
+      else{
+        passport.authenticate( 'local') (req, res, function () {
+          console.log('user loggedin' ,  req.user);
+            res.send({
+              data : req.user,
+              login : true,
+            })
+        })
+      }
+    })
+
+});
+
+app.post('/logout', (req, res) => {
+    req.logout( 
+       function(err){
+        if(!err){
+          req.session.destroy( (err) => {
+            if(err){
+              console.log(err);
+            }
+            else{
+              console.log('user logged out');
+              res.send({
+                data : null,
+                login : false,
+              })
+            }
+          } );
+        }
+        else{
+         console.log(err);
+        }
+       }
+    );
+    
+} );
+
+app.post('/register' ,  (req, res) => {
+    let { email, name, username, scholarid,  branch, issues , password } = req.body
+    const usr = {
+      username ,
+      scholarid,
+      name,
+      email,
+      branch, 
+    };
+    console.log(username, email, name, branch, password);
+    console.log(usr);
+    User.register( usr, password, function(err, user){
+      if(err){
+        console.log(err);
+      }
+      else{
+        passport.authenticate('local')(req, res, function() {
+          console.log('User registered');
+          res.send ({data: req.body,
+                      login : true});
+        });
+      }
+    } );
+}  ) ;
 
 
 

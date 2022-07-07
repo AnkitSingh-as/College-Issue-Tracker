@@ -72,14 +72,14 @@ export default function CustomCard(props) {
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 2 }}>
           <Box>
-            Title
+            {props.title}
           </Box>
           <Box>
-            Issue id: #3761
+            {'Issue id: #' + props.id}
           </Box>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          Status
+          {props.status}
         </Box>
       </Box>
       <CardMedia
@@ -108,16 +108,16 @@ export default function CustomCard(props) {
               <ThumbDownOffAltOutlined sx={{ transform: 'scale(1.5)', color: 'green' }} />
             </IconButton>
           </Box>
-          <Box>
+          {/* <Box>
             +123
-          </Box>
+          </Box> */}
         </Box>
         <Box sx = {{display : 'flex' , flexDirection : 'row'}}>
             <Box>
               Author :  
             </Box>
             <Box>
-              Ankit Singh , 1914172
+              {'Ankit Singh ,' + props.author}
             </Box>
         </Box>
         <Box sx = {{display : 'flex' , flexDirection : 'row'}}>
@@ -125,7 +125,7 @@ export default function CustomCard(props) {
               Date :   
             </Box>
             <Box>
-              05-07-2022
+              {props.creationdate}
             </Box>
         </Box>
       </CardContent>

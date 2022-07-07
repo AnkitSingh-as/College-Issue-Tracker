@@ -5,10 +5,12 @@ import PasswordBox from './passwordBox';
 import SubmitButton from './SubmitButton';
 import SimpleDialog from './Dialog';
 import { boxSizing } from '@mui/system';
+import { useDispatch } from 'react-redux';
+import { sendNewIssue } from '../store/issue-action';
+import Button from '@mui/material/Button';
 
 
-
-const IssueInput = () => {
+const IssueInput = (props) => {
 
     const location = [
         {
@@ -37,8 +39,9 @@ const IssueInput = () => {
         }
     ]
 
-    const [open, setOpen] = React.useState(true);
 
+
+    const dispatch = useDispatch();
 
     const formSumitHandler = (event) => {
         event.preventDefault();
@@ -46,6 +49,9 @@ const IssueInput = () => {
         // console.log(scholarId.value, email.value, name.value, branch.value, password.value, confirmPassword.value);
 
         const { title, imgsrc,  description, location} = event.target;
+        let creationDate = new Date();
+        creationDate = creationDate.toDateString();
+        
         // console.log(title.value, imgsrc.value, location.value , description.value);
         const issue = {
             key : 1,
@@ -53,34 +59,49 @@ const IssueInput = () => {
             title : title.value,
             description : description.value,
             author : 1914172,
-            creationDate: new Date(),
+            creationDate: creationDate,
             solvedDate : null,
             status : 'Active',
             likes : null,
-            imgsrc : imgsrc.value,
+            imgSrc : imgsrc.value,
             location : location.value,
         }
 
-        fetch("/addissue", {
-            method : 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(issue),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Success:", data);
-            })
-            .catch((error) => {
-              console.log("Error:", error);
-        });
+        // fetch("/addissue", {
+        //     method : 'POST',
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify(issue),
+        //   })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //       console.log("Success:", data);
+        //     })
+        //     .catch((error) => {
+        //       console.log("Error:", error);
+        // });
+        dispatch(sendNewIssue(issue));
 
-        setOpen(false);
+        props.onClose(false);
         console.log('closed by submit click');
     }
 
+    //     const[open, setOpen] = React.useState(false);
+
+    // const handleOpen = () =>{
+    //     setOpen(true);
+    //     console.log('i have been clicked')
+    // }
+    // const handleClose = () => {
+    //     setOpen(false);
+    // }
+
+    // <SubmitButton title='Add new Issue' onClick = {handleaddIssuebutton} />
   
     return (
-    <SimpleDialog title='Submit the details of the issue' open={open} close={setOpen}>
+        <>
+        {/* <Button onClick={handleOpen}> Add new issue</Button> */}
+    {/* <SubmitButton title={'ADD NEW ISSUE'} type='button'  onClick = {handleOpen}>Add new Issue</SubmitButton> */}
+    <SimpleDialog title='Submit the details of the issue' open={props.open} onClose={props.onClose}>
     <form onSubmit= {formSumitHandler}>
         <Box sx={{
             margin: '10px',
@@ -146,10 +167,11 @@ const IssueInput = () => {
         }}>
             <SelectInput list={location} name='location' listTitle='branch' />
         </Box>
-        <SubmitButton title='SUBMIT'></SubmitButton>
+        <SubmitButton title='SUBMIT' type='submit'></SubmitButton>
 
     </form>
     </SimpleDialog>
+    </>
 )
 }
 

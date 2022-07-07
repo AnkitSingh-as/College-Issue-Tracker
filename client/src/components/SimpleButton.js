@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Box } from '@mui/material';
-const SubmitButton = (props) => {
+const SimpleButton = (props) => {
   return (
     <Box sx = {{
         margin : '10px' ,
@@ -10,7 +10,7 @@ const SubmitButton = (props) => {
         justifyContent : 'center',
     }}>
     <Button fullWidth = {true}
-        type= {props.type}
+        onClick = {props.onClick}
         sx = {{
             color : '#fff',
             fontWeight : 'bold',
@@ -22,4 +22,4 @@ const SubmitButton = (props) => {
   )
 }
 
-export default SubmitButton;
+export default SimpleButton;

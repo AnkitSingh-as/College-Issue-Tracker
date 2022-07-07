@@ -1,8 +1,15 @@
 import React from 'react'
 import IssueInput from '../components/IssueInput'
-const IssueForm = () => {
+import SubmitButton from '../components/SubmitButton'
+const IssueForm = (props) => {
+
+    
+
   return (
-    <IssueInput/>
+    <>
+    <IssueInput open={props.open} onClose={props.onClose} />
+     {/* <SubmitButton title='actually show issue'> </SubmitButton> */}
+    </>
   )
 }
 
