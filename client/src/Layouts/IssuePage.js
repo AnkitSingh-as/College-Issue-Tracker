@@ -40,6 +40,7 @@ const IssuePage = () => {
             status = {issue.status}
             title = {issue.title}
             imgsrc = {issue.imgSrc}
+            authorname = {issue.authorname}
           />
          ) )
       }

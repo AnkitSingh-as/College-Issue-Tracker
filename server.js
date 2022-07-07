@@ -61,6 +61,7 @@ const issueSchema  = new mongoose.Schema({
     likes: Array,
     imgSrc : String,
     location : String,
+    authorname : String,
 });
 
 const userSchema = new mongoose.Schema({

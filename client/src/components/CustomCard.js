@@ -24,6 +24,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbDownOffAltOutlined from '@mui/icons-material/ThumbDownOffAltOutlined';
+import { useSelector } from 'react-redux';
 // const ExpandMore = styled((props) => {
 //   const { expand, ...other } = props;
 //   return <IconButton {...other} />;
@@ -54,6 +55,9 @@ import ThumbDownOffAltOutlined from '@mui/icons-material/ThumbDownOffAltOutlined
 
 export default function CustomCard(props) {
   const [expanded, setExpanded] = React.useState(false);
+
+  const user = useSelector( ( state) => state.loginSlice.user );
+  
 
   const [status, setStatus] = React.useState();
 
@@ -117,7 +121,7 @@ export default function CustomCard(props) {
               Author :  
             </Box>
             <Box>
-              {'Ankit Singh ,' + props.author}
+              { (props.authorname) + ', ' + props.author}
             </Box>
         </Box>
         <Box sx = {{display : 'flex' , flexDirection : 'row'}}>

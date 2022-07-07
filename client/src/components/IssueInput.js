@@ -5,9 +5,10 @@ import PasswordBox from './passwordBox';
 import SubmitButton from './SubmitButton';
 import SimpleDialog from './Dialog';
 import { boxSizing } from '@mui/system';
-import { useDispatch } from 'react-redux';
+import { useDispatch  , useSelector} from 'react-redux';
 import { sendNewIssue } from '../store/issue-action';
 import Button from '@mui/material/Button';
+import loginSlice from '../store/login-slice';
 
 
 const IssueInput = (props) => {
@@ -42,6 +43,22 @@ const IssueInput = (props) => {
 
 
     const dispatch = useDispatch();
+    const user = useSelector( (state) => state.loginSlice.user );
+    const issues = useSelector( ( state) => state.issue.issues);
+
+
+    let key;
+    let id;
+
+    if(issues.length==0){
+        key = 1;
+        id = 1;
+    }
+    else{
+        key = +issues.length + 1;
+        id = key;
+    }
+
 
     const formSumitHandler = (event) => {
         event.preventDefault();
@@ -51,20 +68,25 @@ const IssueInput = (props) => {
         const { title, imgsrc,  description, location} = event.target;
         let creationDate = new Date();
         creationDate = creationDate.toDateString();
+       
+
         
         // console.log(title.value, imgsrc.value, location.value , description.value);
+        
+
         const issue = {
-            key : 1,
-            id : 1,
+            key : key,
+            id : id,
             title : title.value,
             description : description.value,
-            author : 1914172,
+            author : user[0].scholarid,
             creationDate: creationDate,
             solvedDate : null,
             status : 'Active',
             likes : null,
             imgSrc : imgsrc.value,
             location : location.value,
+            authorname : user[0].name,
         }
 
         // fetch("/addissue", {
@@ -165,7 +187,7 @@ const IssueInput = (props) => {
             margin: '10px',
             padding: '5px',
         }}>
-            <SelectInput list={location} name='location' listTitle='branch' />
+            <SelectInput list={location} name='location' listTitle='location' />
         </Box>
         <SubmitButton title='SUBMIT' type='submit'></SubmitButton>
 
