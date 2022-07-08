@@ -74,7 +74,8 @@ const userSchema = new mongoose.Schema({
   email: String,
   branch: String,
   password: String,
-  issues: { type: Array, default: [] }
+  issues: { type: Array, default: [] },
+  isAdmin : {type : Boolean, default : false},
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -152,30 +153,23 @@ app.post('/login', (req, res) => {
     password: password,
   });
 
-  const authenticate = User.authenticate();
-  // const username = scholarid;
-  authenticate(username, password, function (err, result) {
-    if (err) {
+ 
+  req.login(user, (err) => {
+     
+    if(err) {
       console.log(err);
     }
-    else {
-      if (result) {
-        passport.authenticate('local')(req, res, function () {
-          console.log('user loggedin', req.user);
+    else{
+      passport.authenticate( 'local') (req, res, function () {
+        console.log('user loggedin' ,  req.user);
           res.send({
-            data: result, 
-            login : true,        });
-          }
-        )
-       
-      }
-      else {
-        res.send({ data: result, login: false });
-      }
+            data : req.user,
+            login : true,
+          })
+      })
     }
-  }
+  })
 
-  );
 })
   app.post('/logout', (req, res) => {
     req.logout(

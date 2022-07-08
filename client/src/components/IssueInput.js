@@ -70,10 +70,7 @@ const IssueInput = (props) => {
         creationDate = creationDate.toDateString();
        
 
-        
-        // console.log(title.value, imgsrc.value, location.value , description.value);
-        
-
+       
         const issue = {
             key : key,
             id : id,

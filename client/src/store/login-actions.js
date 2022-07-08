@@ -1,5 +1,22 @@
 import { loginActions } from "./login-slice";
-import  {stringify} from 'flatted';
+
+export  const fetchUser = async ( idobj ) => {
+    const response = await 
+    fetch ( '/getuser',
+    {method : 'POST', 
+    headers : {'Content-Type' : 'application/json'},
+    body : JSON.stringify(idobj)
+    
+} );
+
+    if(!response.ok){
+        throw new Error('User couldn\'t be fetched');
+    }
+
+    const userData = await response.json();
+    return userData;
+}
+
 
  export const loginUserthunk  = (data) => {
     return async (dispatch) => {
@@ -24,23 +41,7 @@ import  {stringify} from 'flatted';
 
     }
 
-    const fetchUser = async ( idobj ) => {
-        const response = await 
-        fetch ( '/getuser',
-        {method : 'POST', 
-        headers : {'Content-Type' : 'application/json'},
-        body : JSON.stringify(idobj)
-        
-    } );
-
-        if(!response.ok){
-            throw new Error('User couldn\'t be fetched');
-        }
-
-        const userData = await response.json();
-        return userData;
-    }
-
+    
 
     try{
         let userdata = await loginUser();
@@ -92,6 +93,17 @@ export const registerUserthunk  = (data) => {
 
     try{
         const userdata = await registerUser();
+        const idobj = {scholarid : userdata.data.username};
+
+            try{
+                const userinfo = await fetchUser(idobj);
+                userdata.data = userinfo;
+
+            }
+            catch(error){
+                console.log(error);
+            }
+
         console.log('hii' , userdata);
         dispatch(loginActions.login(userdata));
 
