@@ -50,7 +50,7 @@ const IssueInput = (props) => {
     let key;
     let id;
 
-    if(issues.length==0){
+    if(issues.length===0){
         key = 1;
         id = 1;
     }

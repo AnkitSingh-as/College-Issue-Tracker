@@ -58,6 +58,7 @@ export default function CustomCard(props) {
 
   const user = useSelector( ( state) => state.loginSlice.user );
   
+  console.log(props.status);
 
   const [status, setStatus] = React.useState();
 
@@ -66,12 +67,15 @@ export default function CustomCard(props) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 360, minWidth : 360 , borderRadius : '10px'}}>
       <Box sx={{
         display: 'flex',
       }}>
         <Box sx={{ display: 'flex', height: '70px', alignItems: 'center', justifyContent: 'center', }}>
-          <Box sx={{ backgroundColor: 'green', height: '30px', width: '30px', borderRadius: '100px', margin: '15px' }}>
+          <Box sx={{  height: '30px', width: '30px', borderRadius: '100px', margin: '15px',
+           ...(props.status==='Active' && {color : 'goldenrod' , backgroundColor: 'goldenrod'} ),
+           ...(props.status==='Solved' && {color : 'green' , backgroundColor : 'green'}),
+        }}>
           </Box>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 2 }}>
@@ -82,8 +86,13 @@ export default function CustomCard(props) {
             {'Issue id: #' + props.id}
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
+          <Box sx = {{height: 'max-content', padding: '2px 3px 2px 3px',
+        ...(props.status==='Active' && {color : 'goldenrod' , backgroundColor: 'rgba(189, 189, 3, 0.103)'} ),
+        ...(props.status==='Solved' && {color : 'green' , backgroundColor : 'rgba(0, 128, 0, 0.151)'}),
+        }}>
           {props.status}
+          </Box>
         </Box>
       </Box>
       <CardMedia

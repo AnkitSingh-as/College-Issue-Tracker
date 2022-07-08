@@ -16,9 +16,11 @@ function SimpleDialog(props) {
     }
 
     return (
-        <Dialog open={props.open } onClose={close} >
+        <Dialog open={props.open } onClose={close} PaperProps={{
+            style: { borderRadius: '10px' }   }} >
             <DialogTitle>
-                <Box sx = {{display : 'flex', justifyContent : 'center', alignItems : 'center'}}>
+                <Box sx = {{display : 'flex', justifyContent : 'center', alignItems : 'center'
+        }}>
                     {props.title}
                 </Box>
                 </DialogTitle>
