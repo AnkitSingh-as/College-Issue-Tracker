@@ -20,9 +20,10 @@ const LoginInput = () => {
         event.preventDefault();
         const {password, scholarId} = event.target;
         console.log(event.target.password.value, event.target.scholarId.value);
+        const username =  scholarId.value;
 
         const data = {
-            scholarid : scholarId.value,
+            username : username,
             password : password.value,
         }
 
