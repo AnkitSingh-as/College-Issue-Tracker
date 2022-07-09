@@ -227,8 +227,8 @@ app.post('/login', (req, res) => {
 
 
   app.get("*", (req, res) => {
-    app.use(express.static(path.join(__dirname, "client", "build")));
-  });
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
