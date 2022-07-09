@@ -6,6 +6,8 @@ import SimpleButton from '../components/SimpleButton';
 import { logoutUserthunk } from '../store/login-actions';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import PrimarySearchAppBar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const IssuePage = () => {
 
@@ -31,7 +33,8 @@ const IssuePage = () => {
     console.log(issues);
   return (
     <div>
-      <Box sx ={{flexGrow : 1}} >
+      <PrimarySearchAppBar handleIssueButton = {handleaddIssuebutton} handleLogout = {handleLogout} />
+      <Box sx ={{flexGrow : 1 , padding: '30px'}} >
       <Grid container rowSpacing={4} columnSpacing={{ md : 12, sm : 5 , lg: 1}}
         justifyContent="center"
         alignItems="center"
@@ -58,10 +61,10 @@ const IssuePage = () => {
       }
       </Grid>
       </Box>
-      <SimpleButton title='Add Issue' onClick = {handleaddIssuebutton} />
+      {/* <SimpleButton title='Add Issue' onClick = {handleaddIssuebutton} /> */}
       {setOpen && <IssueForm open={open} onClose={handleClose} />}
-      <SimpleButton title='Logout' onClick={handleLogout}></SimpleButton>
-      
+      {/* <SimpleButton title='Logout' onClick={handleLogout}></SimpleButton> */}
+      <Footer/>
     </div>
   )
 }
