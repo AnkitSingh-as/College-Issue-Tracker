@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": "16.15.0"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AnkitSingh-as/College-Issue-Tracker.git"
@@ -28,6 +28,7 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "flatted": "^3.2.6",
