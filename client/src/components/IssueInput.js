@@ -80,7 +80,7 @@ const IssueInput = (props) => {
             creationDate: creationDate,
             solvedDate : null,
             status : 'Active',
-            likes : null,
+            likes : [ [] , []],
             imgSrc : imgsrc.value,
             location : location.value,
             authorname : user[0].name,

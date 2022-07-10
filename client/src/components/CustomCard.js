@@ -25,6 +25,8 @@ import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbDownOffAltOutlined from '@mui/icons-material/ThumbDownOffAltOutlined';
 import { useSelector } from 'react-redux';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+
 // const ExpandMore = styled((props) => {
 //   const { expand, ...other } = props;
 //   return <IconButton {...other} />;
@@ -57,14 +59,135 @@ export default function CustomCard(props) {
   const [expanded, setExpanded] = React.useState(false);
 
   const user = useSelector( ( state) => state.loginSlice.user );
+
+  const issues = useSelector( (state) => state.issue.issues );
   
-  console.log(props.status);
+  // console.log(props.status);
+  let flaglike = false;
+
+let flLike  = false;
+
+let flDislike = false;
+
+
+  
 
   const [status, setStatus] = React.useState();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  
+
+  const idx = issues.findIndex( (issue) => issue.id===props.id );
+
+
+
+  let likes = JSON.parse(JSON.stringify(issues[idx].likes));
+
+  const [likess, setLikes] = React.useState(likes);
+
+  console.log('likess: ',likess, issues[idx].id);
+  // let liked  = JSON.parse(JSON.stringify(likes[0]));
+  // let disliked = JSON.parse(JSON.stringify(likes[1]));
+  
+  
+  const [flag, setFlag] = React.useState(false);
+  
+  if(issues[0].likes.length > 0){
+
+  if(issues[idx].likes[0].includes(user[0].scholarid)){
+    flLike = true;
+  }
+
+  if(issues[idx].likes[1].includes(user[0].scholarid)){
+    flDislike = true;
+  }
+  }
+  const[ifLiked, setifLiked] = React.useState(flLike);
+
+  const [ifDisliked, setifDisliked] = React.useState(flDislike);
+
+  const handleLikeButton = () => {
+    if(!ifDisliked && !ifLiked){
+      
+        let arr1 = JSON.parse(JSON.stringify(likess[0]));
+        arr1.push(user[0].scholarid);
+        let arr2 =  JSON.parse(JSON.stringify(likess[0]));
+        let arr = [[...arr1], [...arr2]];
+
+        setLikes(arr);
+        console.log( likess);
+        setifLiked(true);
+    }
+    else if(ifLiked){
+      
+      let arr1 =  likess[0].filter( (item) => item!==user[0].scholarid );
+      let arr2 = JSON.parse(JSON.stringify(likess[1]));
+      let arr  = [ [...arr1], [...arr2] ];
+      setLikes(arr);
+      console.log('upating from filter: ', likess);
+      setifLiked(false);
+    }
+  }
+
+  React.useEffect(() => {
+    if (flag && ifLiked) {
+      const updateLike = async () => {
+        console.log(likess, 'from updatelike function')
+        const res = await fetch('/updateLike', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            likes: likess,
+            id: issues[idx].id
+          })
+        });
+
+        if(!res.ok){
+          throw new Error('Couldn\'t be liked');
+        }
+      }
+
+      try{
+         updateLike();
+      }
+      catch(err){
+        console.log(err);
+      }
+
+
+    }
+    if(flag && !ifLiked){
+      const updateLike = async () => {
+        console.log(likess, 'from updatelike function 2')
+        const res = await fetch('/updateLike', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            likes: likess,
+            id: issues[idx].id
+          })
+        });
+
+        if(!res.ok){
+          throw new Error('Couldn\'t be liked');
+        }
+      }
+
+      try{
+         updateLike();
+      }
+      catch(err){
+        console.log(err);
+      }
+
+
+    }
+   setFlag(true);
+  }
+    , [ifLiked, likess, idx, issues, flLike])
 
   return (
     <Card sx={{ maxWidth: 360, minWidth : 360 , borderRadius : '10px'}}>
@@ -104,12 +227,14 @@ export default function CustomCard(props) {
       <CardContent>
         <Box sx={{ display: 'flex', flexDirection: 'row'  , alignItems: 'center'}}>
           <Box sx={{ boxShadow: '10px' , display : 'flex'}}>
-            <IconButton aria-label="delete"
+            <IconButton aria-label="delete"  onClick = {handleLikeButton}
 
               sx={{ '&:hover': { backgroundColor: 'rgba(0, 128, 0, 0.151)' } }}
 
-            >
-              <ThumbUpAltOutlinedIcon sx={{ transform: 'scale(1.5)', color: 'green' }} />
+            >{ifLiked ? <ThumbUpIcon sx={{ transform: 'scale(1.5)', color: 'green' }} /> : 
+            <ThumbUpAltOutlinedIcon sx={{ transform: 'scale(1.5)', color: 'green' }} />
+            }
+             
             </IconButton>
           </Box>
           <Box sx={{ boxShadow: '10px',  display : 'flex'}}>

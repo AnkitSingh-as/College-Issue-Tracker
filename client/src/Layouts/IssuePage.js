@@ -9,6 +9,8 @@ import Box from '@mui/material/Box';
 import PrimarySearchAppBar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+
+
 const IssuePage = () => {
 
     const issues = useSelector( (state) => state.issue.issues );
@@ -30,6 +32,8 @@ const IssuePage = () => {
         dispatch(logoutUserthunk());
     }
 
+   
+
     console.log(issues);
   return (
     <div>
@@ -47,7 +51,7 @@ const IssuePage = () => {
             justifyContent : 'center',
           }} >
             <CustomCard 
-            key = {issue.id}
+            key = {issue.id.toString()}
             id = {issue.id}
             author = {issue.author}
             creationdate = {issue.creationDate}
@@ -55,6 +59,7 @@ const IssuePage = () => {
             title = {issue.title}
             imgsrc = {issue.imgSrc}
             authorname = {issue.authorname}
+            
           />
           </Grid> 
          ) )

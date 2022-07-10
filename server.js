@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 5000;
 let userDetails = {};
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+const findOrCreate = require('mongoose-find-or-create');
 
 // using config vars to handle multiple environments for now
 let URL = process.env.URL;
@@ -61,7 +62,7 @@ const issueSchema = new mongoose.Schema({
   creationDate: String,
   solvedDate: String,
   status: String,
-  likes: Array,
+  likes: {type: Array , default : [ [], []]},
   imgSrc: String,
   location: String,
   authorname: String,
@@ -79,6 +80,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 const Issue = new mongoose.model("Issue", issueSchema);
 const User = new mongoose.model("User", userSchema);
@@ -233,3 +235,20 @@ app.post('/login', (req, res) => {
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
   });
+
+  app.post('/updateLike', (req, res) => {
+    const {likes, id} = req.body;
+    console.log(likes, id, 'updating issue');
+    Issue.find({id : id}, (err, foundItem)  => {
+      if(!err){
+          Issue.findOneAndUpdate( { id : id} ,  {
+            likes : likes,
+          },  (err, foundItem) => {
+            if(!err){
+              console.log('updated');
+              res.status(200).json({success :  true});
+            }
+          } )
+      }
+    } )
+  })
