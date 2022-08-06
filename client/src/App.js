@@ -17,26 +17,23 @@ let flag = false;
 function App() {
 
   const dispatch = useDispatch();
-
+  
   const login = useSelector((state) => state.loginSlice.login);
-  const userdata  = useSelector( (state) => state.loginSlice.user );
+  const userdata  = useSelector((state) => state.loginSlice.user );
   // const login = true;
   console.log(login);
   console.log('app' , userdata);
 
-  if(flag){
-    
-  }
-
+  
   React.useEffect(() => {
     if(!login){
       dispatch(checkLoginthunk());
     console.log('login checked');}
-    if(login){
+    // if(login){
     dispatch(fetchIssueData());
-    console.log('data fetched');}
-    
-  }, [dispatch, login])
+    console.log('data fetched');
+    // }
+  }, [dispatch])
 
   return (
     <>

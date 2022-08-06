@@ -31,8 +31,8 @@ if (process.env.NODE_ENV !== "production") {
 app.use(
   session({
     secret: process.env.EXPRESS_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
