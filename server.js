@@ -19,6 +19,17 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 const findOrCreate = require('mongoose-find-or-create');
 
+const lmap =new Map();
+
+    lmap.set('HOSTEL-9', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('HOSTEL-6', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('ADMIN BUILDING', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('GYMKHANA PARK', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('NEW GALLERY', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('SPORTS COMPLEX', "ankitsingh_ug@ece.nits.ac.in");
+
+
+
 // using config vars to handle multiple environments for now
 let URL = process.env.URL;
 

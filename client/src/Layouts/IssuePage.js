@@ -15,6 +15,8 @@ const IssuePage = () => {
 
     const issues = useSelector( (state) => state.issue.issues );
 
+    
+
     const dispatch = useDispatch();
 
     const [open, setOpen] = React.useState(false);
@@ -60,6 +62,7 @@ const IssuePage = () => {
             imgsrc = {issue.imgSrc}
             authorname = {issue.authorname}
             description = {issue.description}
+            location = {issue.location}
           />
           </Grid> 
          ) )

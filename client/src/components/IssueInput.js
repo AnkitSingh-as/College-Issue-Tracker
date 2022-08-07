@@ -9,6 +9,7 @@ import { useDispatch  , useSelector} from 'react-redux';
 import { sendNewIssue } from '../store/issue-action';
 import Button from '@mui/material/Button';
 import loginSlice from '../store/login-slice';
+import emailjs from '@emailjs/browser';
 
 
 const IssueInput = (props) => {
@@ -39,6 +40,16 @@ const IssueInput = (props) => {
             label: 'SPORTS COMPLEX',
         }
     ]
+
+    const lmap =new Map();
+
+    lmap.set('HOSTEL-9', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('HOSTEL-6', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('ADMIN BUILDING', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('GYMKHANA PARK', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('NEW GALLERY', "ankitsingh_ug@ece.nits.ac.in");
+    lmap.set('SPORTS COMPLEX', "ankitsingh_ug@ece.nits.ac.in");
+    
 
 
 
@@ -100,7 +111,21 @@ const IssueInput = (props) => {
         // });
         dispatch(sendNewIssue(issue));
 
+         var templateParams = {
+            location_email : lmap.get(location.value),
+            id : id,
+            location : location.value,
+            title : title.value,
+            description : description.value,
+            authorname : user[0].name,
+            author : user[0].scholarid,
+         }
+
+         emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, templateParams, process.env.REACT_APP_PUBLIC_KEY )
+
         props.onClose(false);
+
+
         console.log('closed by submit click');
     }
 

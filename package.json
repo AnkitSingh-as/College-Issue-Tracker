@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/AnkitSingh-as/College-Issue-Tracker#readme",
   "dependencies": {
+    "@emailjs/browser": "^3.6.2",
     "body-parser": "^1.20.0",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
