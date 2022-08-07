@@ -59,7 +59,7 @@ const IssuePage = () => {
             title = {issue.title}
             imgsrc = {issue.imgSrc}
             authorname = {issue.authorname}
-            
+            description = {issue.description}
           />
           </Grid> 
          ) )

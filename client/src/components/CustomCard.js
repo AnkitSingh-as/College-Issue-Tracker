@@ -57,6 +57,7 @@ const ExpandMore = styled((props) => {
 
 
 export default function CustomCard(props) {
+  // console.log("props: " ,props);
   const [expanded, setExpanded] = React.useState(false);
 
   const user = useSelector( ( state) => state.loginSlice.user );
@@ -77,6 +78,7 @@ let flDislike = false;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+    console.log("Expanded");
   };
 
   
@@ -264,7 +266,7 @@ let flDislike = false;
             </IconButton>
           </Box>
           <Box sx={{ display: 'flex' , margin: '0 0 0 8px' }}>
-            {likess[0].length - likes[1].length}
+            {likess[0].length - likess[1].length}
           </Box>
         </Box>
         <Box sx = {{display : 'flex' , flexDirection : 'row'}}>
@@ -292,6 +294,17 @@ let flDislike = false;
           <ShareIcon   sx = {{color : '#1363DF'}} />
         </IconButton>
       </CardActions>
+
+
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>Description:</Typography>
+          <Typography paragraph>
+            {props.description}
+          </Typography>
+        </CardContent>
+      </Collapse>
+
     </Card>
   );
 }
