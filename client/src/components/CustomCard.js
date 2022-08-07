@@ -24,19 +24,20 @@ import InfoIcon from '@mui/icons-material/Info';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbDownOffAltOutlined from '@mui/icons-material/ThumbDownOffAltOutlined';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useSelector } from 'react-redux';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
-// const ExpandMore = styled((props) => {
-//   const { expand, ...other } = props;
-//   return <IconButton {...other} />;
-// })(({ theme, expand }) => ({
-//   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-//   marginLeft: 'auto',
-//   transition: theme.transitions.create('transform', {
-//     duration: theme.transitions.duration.shortest,
-//   }),
-// }));
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 
 // .status {
@@ -114,7 +115,7 @@ let flDislike = false;
       
         let arr1 = JSON.parse(JSON.stringify(likess[0]));
         arr1.push(user[0].scholarid);
-        let arr2 =  JSON.parse(JSON.stringify(likess[0]));
+        let arr2 =  JSON.parse(JSON.stringify(likess[1]));
         let arr = [[...arr1], [...arr2]];
 
         setLikes(arr);
@@ -132,24 +133,53 @@ let flDislike = false;
     }
   }
 
+  const handleDislikeButton = () => {
+    if(!ifLiked && !ifDisliked){
+    console.log("Hello from dislike button")
+
+      let arr1 = JSON.parse(JSON.stringify(likess[1]));
+      arr1.push(user[0].scholarid);
+      let arr2 = JSON.parse(JSON.stringify(likess[0]));
+      let arr= [ [...arr2], [...arr1] ];
+
+      setLikes(arr);
+      console.log(likess);
+      setifDisliked(true);
+    }
+
+    else if(ifDisliked){
+      let arr1 =  likess[1].filter( (item) => item!==user[0].scholarid );
+      let arr2 = JSON.parse(JSON.stringify(likess[0]));
+      let arr  = [ [...arr2], [...arr1] ];
+      setLikes(arr);
+      console.log('upating from filter: ', likess);
+      setifDisliked(false);
+    }
+  }
+
+
   React.useEffect(() => {
-    if (flag && ifLiked) {
-      const updateLike = async () => {
-        console.log(likess, 'from updatelike function')
-        const res = await fetch('/updateLike', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            likes: likess,
-            id: issues[idx].id
-          })
-        });
 
-        if(!res.ok){
-          throw new Error('Couldn\'t be liked');
-        }
+    const updateLike = async () => {
+      console.log(likess, 'from updatelike function')
+      const res = await fetch('/updateLike', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          likes: likess,
+          id: issues[idx].id
+        })
+      });
+
+      if(!res.ok){
+        throw new Error('Couldn\'t be liked');
       }
+    }
 
+
+
+    if (flag && ifLiked) {
+      
       try{
          updateLike();
       }
@@ -160,34 +190,18 @@ let flDislike = false;
 
     }
     if(flag && !ifLiked){
-      const updateLike = async () => {
-        console.log(likess, 'from updatelike function 2')
-        const res = await fetch('/updateLike', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            likes: likess,
-            id: issues[idx].id
-          })
-        });
-
-        if(!res.ok){
-          throw new Error('Couldn\'t be liked');
-        }
-      }
-
       try{
          updateLike();
       }
       catch(err){
         console.log(err);
       }
-
-
     }
+    
+
    setFlag(true);
   }
-    , [ifLiked, likess, idx, issues, flLike])
+    , [ifLiked, likess, idx, issues, flLike, ifDisliked, flag])
 
   return (
     <Card sx={{ maxWidth: 360, minWidth : 360 , borderRadius : '10px'}}>
@@ -227,7 +241,7 @@ let flDislike = false;
       <CardContent>
         <Box sx={{ display: 'flex', flexDirection: 'row'  , alignItems: 'center'}}>
           <Box sx={{ boxShadow: '10px' , display : 'flex'}}>
-            <IconButton aria-label="delete"  onClick = {handleLikeButton}
+            <IconButton aria-label="Dislike"  onClick = {handleLikeButton}
 
               sx={{ '&:hover': { backgroundColor: 'rgba(0, 128, 0, 0.151)' } }}
 
@@ -238,17 +252,20 @@ let flDislike = false;
             </IconButton>
           </Box>
           <Box sx={{ boxShadow: '10px',  display : 'flex'}}>
-            <IconButton aria-label="delete"
+            <IconButton aria-label="Dislike" onClick = {handleDislikeButton}
 
               sx={{ '&:hover': { backgroundColor: 'rgba(0, 128, 0, 0.151)' } }}
 
             >
-              <ThumbDownOffAltOutlined sx={{ transform: 'scale(1.5)', color: 'green' }} />
+              {ifDisliked ? <ThumbDownIcon sx={{ transform: 'scale(1.5)', color: 'green' }} /> : 
+                <ThumbDownOffAltOutlined sx={{ transform: 'scale(1.5)', color: 'green' }} />
+              }
+              
             </IconButton>
           </Box>
-          {/* <Box>
-            +123
-          </Box> */}
+          <Box sx={{ display: 'flex' , margin: '0 0 0 8px' }}>
+            {likess[0].length - likes[1].length}
+          </Box>
         </Box>
         <Box sx = {{display : 'flex' , flexDirection : 'row'}}>
             <Box>
@@ -269,7 +286,7 @@ let flDislike = false;
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
-          <InfoIcon sx = {{color : '#1363DF' , transform : 'scale(1.1)'}} />
+          <InfoIcon sx = {{color : '#1363DF' , transform : 'scale(1.1)'}} onClick={handleExpandClick} />
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon   sx = {{color : '#1363DF'}} />

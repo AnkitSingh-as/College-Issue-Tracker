@@ -26,9 +26,9 @@ function App() {
 
   
   React.useEffect(() => {
-    if(!login){
+   
       dispatch(checkLoginthunk());
-    console.log('login checked');}
+    console.log('login checked');
     // if(login){
     dispatch(fetchIssueData());
     console.log('data fetched');
