@@ -66,7 +66,7 @@ export default function CustomCard(props) {
   const issues = useSelector((state) => state.issue.issues);
 
   // console.log(props.status);
-  let flaglike = false;
+  // let flaglike = false;
 
   let flLike = false;
 
@@ -75,7 +75,7 @@ export default function CustomCard(props) {
 
 
 
-  const [status, setStatus] = React.useState();
+  // const [status, setStatus] = React.useState();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

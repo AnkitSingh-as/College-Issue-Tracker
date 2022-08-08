@@ -1,14 +1,14 @@
 import React from 'react'
-import { Box, TextField,  TextareaAutosize, Modal, Dialog } from '@mui/material';
+import { Box, TextField,  TextareaAutosize } from '@mui/material';
 import SelectInput from './selectInput';
-import PasswordBox from './passwordBox';
+// import PasswordBox from './passwordBox';
 import SubmitButton from './SubmitButton';
 import SimpleDialog from './Dialog';
-import { boxSizing } from '@mui/system';
+// import { boxSizing } from '@mui/system';
 import { useDispatch  , useSelector} from 'react-redux';
 import { sendNewIssue } from '../store/issue-action';
-import Button from '@mui/material/Button';
-import loginSlice from '../store/login-slice';
+// import Button from '@mui/material/Button';
+// import loginSlice from '../store/login-slice';
 import emailjs from '@emailjs/browser';
 
 
@@ -121,7 +121,7 @@ const IssueInput = (props) => {
             author : user[0].scholarid,
          }
 
-         emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, templateParams, process.env.REACT_APP_PUBLIC_KEY )
+        //  emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, templateParams, process.env.REACT_APP_PUBLIC_KEY )
 
         props.onClose(false);
 

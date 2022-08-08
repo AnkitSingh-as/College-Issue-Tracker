@@ -18,6 +18,8 @@ let userDetails = {};
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 const findOrCreate = require('mongoose-find-or-create');
+const axios = require('axios');
+// const https = require('node:https');
 
 const lmap =new Map();
 
@@ -141,6 +143,36 @@ app.post("/addIssue", (req, res) => {
   const issue = new Issue(req.body);
   issue.save();
   console.log(req.body);
+  const  { id, location, author, authorname, title, description} = issue;
+  var data = {
+    service_id: process.env.SERVICE_ID ,
+    template_id: process.env.TEMPLATE_ID,
+    user_id: process.env.PUBLIC_KEY,
+    template_params: {
+      location_email : lmap.get(location),
+      id : id,
+      location: location,
+      title : title,
+      description : description,
+      authorname : authorname,
+      author : author,
+    },
+    accessToken : process.env.PRIVATE_KEY
+};
+
+ const dat = JSON.stringify(data);
+
+  let r =  axios.post('https://api.emailjs.com/api/v1.0/email/send', dat, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  } ).then(() => {
+    console.log("mail sent")
+  }).catch( (err) => {
+    console.log(err);
+  } )
+  // console.log(r.status);
+
   res.send(req.body);
 })
 
